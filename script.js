@@ -30,6 +30,140 @@ const KEY_LAYOUT = {
   keyCode: ["Backquote", "Digit1", "Digit2", "Digit3", "Digit4", "Digit5", "Digit6", "Digit7", "Digit8", "Digit9", "Digit0", "Minus", "Equal", "Backspace", "Tab", "KeyQ", "KeyW", "KeyE", "KeyR", "KeyT", "KeyY", "KeyU", "KeyI", "KeyO", "KeyP", "BracketLeft", "BracketRight", "Backslash", "Delete", "CapsLock", "KeyA", "KeyS", "KeyD", "KeyF", "KeyG", "KeyH", "KeyJ", "KeyK", "KeyL", "Semicolon", "Quote", "Enter", "ShiftLeft", "KeyZ", "KeyX", "KeyC", "KeyV", "KeyB", "KeyN", "KeyM", "Comma", "Period", "Slash", "ArrowUp", "ShiftRight", "ControlLeft", "MetaLeft", "AltLeft", "Space", "AltRight", "ArrowLeft", "ArrowDown", "ArrowRight", "ControlRight"],
 }
 
+class VirtualKeyboard  {
+  constructor(){
+    this.isEnglish = JSON.parse(localStorage.getItem('isEnglish'));3
+    this.isCaseUp = false;
+    this.isShift = false;
+    this.divWrapper = null;
+    this.textArea = null;
+    this.keys = null;
+    this.keyboard = null;
+  }
+
+  createKeyboard() {
+    let keyboardContainer = document.createElement('div');
+    keyboardContainer.classList.add('keyboard');
+    this.divWrapper.append(keyboardContainer);
+    let keyLayout = this.isEnglish ? KEY_LAYOUT.engKeys.shiftOff : KEY_LAYOUT.rusKeys.shiftOff;
+
+    for (let i = 0; i < keyLayout.length; i++ ) {
+      let key = document.createElement('span');
+      key.textContent = keyLayout[i];
+      key.setAttribute('id', KEY_LAYOUT.keyCode[i]);
+      key.classList.add('key');
+      keyboardContainer.append(key);
+    };
+  }
+
+  changeLayout() {
+    let keyLayout = this.isEnglish ? KEY_LAYOUT.engKeys : KEY_LAYOUT.rusKeys;
+    keyLayout = this.isShift ? keyLayout.shiftOn : keyLayout.shiftOff;
+    this.keys.forEach((item, i) => {
+      item.textContent = keyLayout[i];
+    })
+  }
+
+  insertSymbol(key) {
+    let symbol = '';
+    switch(key.id) {
+      case 'Space':
+        symbol = ' ';
+        break;
+      case 'Tab':
+        symbol = '    ';
+        break;
+      case 'Enter':
+        symbol = '\n';
+        break;
+      default:
+      symbol = this.isCaseUp ? key.textContent.toUpperCase() : key.textContent;
+    }
+    let cursorPosition = this.textArea.selectionStart;
+    this.textArea.value = this.textArea.value.slice(0, cursorPosition) + symbol + this.textArea.value.slice(cursorPosition);
+    this.textArea.selectionEnd = this.textArea.selectionStart = cursorPosition + symbol.length;
+  }
+
+  removeSelectedPiece() {
+    let startSelected = this.textArea.selectionStart;
+    let endSelected = this.textArea.selectionEnd;
+    if (startSelected == endSelected) return false;
+    this.textArea.value = this.textArea.value.slice(0, startSelected) + this.textArea.value.slice(endSelected);
+    this.textArea.selectionEnd = this.textArea.selectionStart = startSelected;
+    return true;
+  }
+
+  backspaceSymbol() {
+    if (this.removeSelectedPiece()) return;
+    let cursorPosition = this.textArea.selectionStart;
+    if (!cursorPosition) return;
+    this.textArea.value = this.textArea.value.slice(0, cursorPosition-1) + this.textArea.value.slice(cursorPosition);
+    this.textArea.selectionEnd = this.textArea.selectionStart = cursorPosition-1;
+  }
+
+  deleteSymbol() {
+    if (this.removeSelectedPiece()) return;
+    let cursorPosition = this.textArea.selectionStart;
+    this.textArea.value = this.textArea.value.slice(0, cursorPosition) + this.textArea.value.slice(cursorPosition+1);
+    this.textArea.selectionEnd = this.textArea.selectionStart = cursorPosition;
+  }
+
+  pressKeyDown(key) {
+    switch (key.id) {
+      case 'ControlLeft':
+      case 'MetaLeft':
+      case 'AltLeft':
+      case 'AltRight':
+      case 'ControlRight':
+        key.classList.add('active-key');
+        break;
+      case 'Delete':
+        key.classList.add('active-key');
+        this.deleteSymbol();
+        break;
+      case 'Backspace':
+        key.classList.add('active-key');
+        this.backspaceSymbol();
+        break;
+      case 'ShiftRight':
+      case 'ShiftLeft':
+        if(event.repeat) return;
+        key.classList.add('active-key');
+        this.isShift = true;
+        this.changeLayout();
+        this.keyboard.classList.toggle('upper-case');
+        this.isCaseUp = !this.isCaseUp;
+        break;
+      case 'CapsLock':
+        if(event.repeat) return;
+        key.classList.toggle('active-key');
+        this.keyboard.classList.toggle('upper-case');
+        this.isCaseUp = !this.isCaseUp;
+        break;
+      default:
+        key.classList.add('active-key');
+        this.insertSymbol(key);
+    }
+  }
+
+  pressKeyUp(key) {
+    switch (key.id) {
+      case 'ShiftRight':
+      case 'ShiftLeft':
+        key.classList.remove('active-key');
+        this.isShift = false;
+        this.changeLayout();
+        this.keyboard.classList.toggle('upper-case');
+        this.isCaseUp = !this.isCaseUp;
+        break;
+      case 'CapsLock':
+        break;
+      default:
+        key.classList.remove('active-key');
+    }
+  }
+};
+
 
 
 
