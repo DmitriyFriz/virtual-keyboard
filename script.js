@@ -219,6 +219,17 @@ window.addEventListener('DOMContentLoaded', () => {
       }
     })
   });
+
+  keyboard.addEventListener('mousedown', function(event){
+    if (!event.target.classList.contains('key')) return;
+    textArea.focus();
+    let key = event.target;
+    virtualKeyboard.pressKeyDown(key);
+
+    window.addEventListener('mouseup', function(event){
+      virtualKeyboard.pressKeyUp(key);
+    },{once: true});
+  });
 });
 
 
