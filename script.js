@@ -164,6 +164,63 @@ class VirtualKeyboard  {
   }
 };
 
+window.addEventListener('DOMContentLoaded', () => {
+
+  let divWrapper = document.createElement('div');
+  divWrapper.classList.add('wrapper');
+
+  let textArea = document.createElement('textarea');
+  textArea.classList.add('textarea');
+  divWrapper.append(textArea);
+  document.body.append(divWrapper);
+
+  virtualKeyboard = new VirtualKeyboard();
+
+  virtualKeyboard.divWrapper = divWrapper;
+  virtualKeyboard.textArea = textArea;
+
+  virtualKeyboard.createKeyboard();
+
+  let paragraph1 = document.createElement('p');
+  paragraph1.textContent = 'Для переключения языка комбинация: левыe ctrl + alt';
+  divWrapper.append(paragraph1) ;
+  let paragraph2 = document.createElement('p');
+  paragraph2.textContent = 'Клавиатура создана в операционной системе Windows';
+  divWrapper.append(paragraph2) ;
+
+
+  let keys = document.querySelectorAll('.key');
+  virtualKeyboard.keys = keys;
+
+  let keyboard = document.querySelector('.keyboard');
+  virtualKeyboard.keyboard = keyboard;
+
+  window.addEventListener('keydown', function(event){
+    textArea.focus();
+    event.preventDefault();
+    keys.forEach(key => {
+      if (key.id == event.code) {
+        if (event.ctrlKey && event.altKey ) {
+          if(event.repeat) return;
+          key.classList.add('active-key');
+          virtualKeyboard.isEnglish = !virtualKeyboard.isEnglish;
+          localStorage.setItem('isEnglish', virtualKeyboard.isEnglish);
+          virtualKeyboard.changeLayout();
+        }
+        virtualKeyboard.pressKeyDown(key);
+    }
+    })
+  });
+
+  window.addEventListener('keyup', function(event){
+    keys.forEach(key => {
+      if (key.id == event.code) {
+        virtualKeyboard.pressKeyUp(key);
+      }
+    })
+  });
+});
+
 
 
 
