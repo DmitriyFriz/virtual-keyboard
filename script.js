@@ -168,6 +168,12 @@ class VirtualKeyboard  {
   }
 };
 
+function addParagraph(text, placeAdding) {
+  paragraph = document.createElement('p');
+  paragraph.textContent = text;
+  placeAdding.append(paragraph) ;
+}
+
 window.addEventListener('DOMContentLoaded', () => {
 
   const divWrapper = document.createElement('div');
@@ -182,13 +188,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
   virtualKeyboard.createKeyboard();
 
-  let paragraph1 = document.createElement('p');
-  paragraph1.textContent = 'Для переключения языка комбинация: левыe ctrl + alt';
-  divWrapper.append(paragraph1) ;
-  let paragraph2 = document.createElement('p');
-  paragraph2.textContent = 'Клавиатура создана в операционной системе Windows';
-  divWrapper.append(paragraph2) ;
-
+  addParagraph('Для переключения языка комбинация: левыe ctrl + alt', divWrapper);
+  addParagraph('Клавиатура создана в операционной системе Windows', divWrapper);
 
   let keys = document.querySelectorAll('.key');
   virtualKeyboard.keys = keys;
