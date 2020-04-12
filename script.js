@@ -35,12 +35,12 @@ const KEY_LAYOUT = {
 }
 
 class VirtualKeyboard  {
-  constructor(){
+  constructor(divWrapper, textArea){
     this.isEnglish = JSON.parse(localStorage.getItem('isEnglish'));
     this.isCaseUp = false;
     this.isShift = false;
-    this.divWrapper = null;
-    this.textArea = null;
+    this.divWrapper = divWrapper;
+    this.textArea = textArea;
     this.keys = null;
     this.keyboard = null;
   }
@@ -178,10 +178,7 @@ window.addEventListener('DOMContentLoaded', () => {
   divWrapper.append(textArea);
   document.body.append(divWrapper);
 
-  virtualKeyboard = new VirtualKeyboard();
-
-  virtualKeyboard.divWrapper = divWrapper;
-  virtualKeyboard.textArea = textArea;
+  virtualKeyboard = new VirtualKeyboard(divWrapper, textArea);
 
   virtualKeyboard.createKeyboard();
 
