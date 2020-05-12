@@ -1,0 +1,109 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: aliceblue;
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  color: #6c6a6a;
+}
+
+.wrapper {
+  width: 900px;
+  margin: auto;
+  padding-top: 20px;
+}
+
+.textarea {
+  width: 100%;
+  height: 300px;
+  margin: auto;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  color: #6c6a6a;
+}
+
+.keyboard {
+  width: 704px;
+  margin: 20px auto;
+}
+
+.key {
+  display: inline-flex;
+  height: 40px;
+  width: 40px;
+  z-index: 10;
+  margin: 3px;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+  border-radius: 20px;
+  box-shadow: 8px 3px 6px #6c6a6a;
+  background-color: #70c9d5;
+  font-weight: 300;
+  transition: box-shadow 0.3s, background-color 0.2s;
+}
+
+.key:hover {
+  color: white;
+}
+
+.upper-case {
+  text-transform: uppercase;
+}
+
+.active-key {
+  background-color: rgba(121, 118, 118, 0.6);
+  box-shadow: -2px -2px 2px #6c6a6a7d;
+}
+
+#Backspace {
+  width: 100px;
+}
+
+#Tab {
+  width: 54px;
+}
+
+#Delete {
+  width: 40px;
+}
+
+#CapsLock {
+  width: 78px;
+}
+
+#Enter {
+  width: 108px;
+}
+
+#ShiftLeft {
+  width: 100px;
+}
+
+#ShiftRight {
+  width: 86px;
+}
+
+#Space {
+  width: 330px;
+}
+
+#Backspace, #Tab, #Delete, #CapsLock,
+#Enter, #ShiftLeft, #ShiftRight,
+#ControlLeft, #MetaLeft, #AltLeft,
+#Space, #AltRight, #ControlRight {
+  text-transform: capitalize;
+}
+
+p {
+  text-align: center;
+  padding-bottom: 10px;
+  font-size: 18px;
+  font-weight: 400;
+}
